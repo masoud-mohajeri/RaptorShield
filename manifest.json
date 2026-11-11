@@ -1,0 +1,75 @@
+{
+  "manifest_version": 3,
+  "name": "RaptorShield",
+  "version": "1.1.2",
+  "description": "Align browser identity with any VPN. Inspect your exit IP and open independent IP reputation reports.",
+  "minimum_chrome_version": "120",
+  "permissions": [
+    "storage",
+    "alarms",
+    "tabs",
+    "scripting",
+    "declarativeNetRequest",
+    "privacy",
+    "webNavigation"
+  ],
+  "host_permissions": ["http://*/*", "https://*/*"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_popup": "ui/popup/index.html",
+    "default_title": "RaptorShield · Browser Identity",
+    "default_icon": {
+      "16": "icons/raptorshield-off-16.png",
+      "32": "icons/raptorshield-off-32.png",
+      "48": "icons/raptorshield-off-48.png",
+      "128": "icons/raptorshield-off-128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/raptorshield-on-16.png",
+    "32": "icons/raptorshield-on-32.png",
+    "48": "icons/raptorshield-on-48.png",
+    "128": "icons/raptorshield-on-128.png"
+  },
+  "content_scripts": [
+    {
+      "js": ["bridge.js"],
+      "matches": ["http://*/*", "https://*/*"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "match_about_blank": true
+    },
+    {
+      "js": ["flow-unlock.js"],
+      "matches": [
+        "https://flow.google.com/*",
+        "https://labs.google/fx/tools/flow*"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "js": ["shield.js"],
+      "matches": ["http://*/*", "https://*/*"],
+      "run_at": "document_start",
+      "all_frames": true,
+      "match_about_blank": true,
+      "world": "MAIN"
+    },
+    {
+      "js": ["flow-freeze.js"],
+      "matches": [
+        "https://flow.google.com/*",
+        "https://labs.google/fx/tools/flow*"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "options_ui": {
+    "page": "ui/options/index.html",
+    "open_in_tab": true
+  }
+}

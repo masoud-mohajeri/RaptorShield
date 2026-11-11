@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>RaptorShield · Settings</title>
+    <link rel="stylesheet" href="/assets/hud.css" />
+    <script type="module" src="/options.js"></script>
+  </head>
+  <body>
+    <main class="page">
+      <header class="hud-header" dir="ltr">
+        <a class="brand" href="/ui/popup/index.html"
+          ><img
+            src="/icons/raptorshield.svg"
+            width="42"
+            height="42"
+            alt=""
+          /><span
+            ><strong>RAPTORSHIELD<span class="brand-slash">/</span></strong
+            ><small>BROWSER IDENTITY SYSTEM</small></span
+          ></a
+        ><span class="version" id="version"></span>
+      </header>
+      <div class="page-intro">
+        <div>
+          <p class="section-number" dir="ltr">CONTROL CENTER / CONFIGURATION</p>
+          <h1>Browser identity controls</h1>
+          <p class="muted" id="country-line">Loading status…</p>
+        </div>
+        <a class="back-link" href="/ui/popup/index.html"
+          >Overview & IP check ↗</a
+        >
+      </div>
+      <p class="notice error" id="error" role="alert"></p>
+      <p class="notice">
+        Settings apply to newly loaded pages. Reload open pages after each
+        change; switching protection off does not remove existing page patches.
+      </p>
+      <div class="options-grid">
+        <div class="options-column">
+          <section class="card">
+            <div class="panel-kicker" dir="ltr">
+              <span>01 / PROTECTION MODULES</span><span>12 MODULES</span>
+            </div>
+            <div class="card-head">
+              <span class="chip-icon"
+                ><i data-icon="shield-check" data-size="18"></i
+              ></span>
+              <h2>Browser shields</h2>
+            </div>
+            <p class="muted">
+              Start with the defaults. Fingerprint options may affect site
+              compatibility. Installing a shield does not guarantee anonymity.
+            </p>
+            <div id="shields" class="shields"></div>
+          </section>
+          <section class="card">
+            <div class="panel-kicker" dir="ltr">
+              <span>02 / COMPATIBILITY</span><span>OPTIONAL</span>
+            </div>
+            <div class="card-head">
+              <span class="chip-icon"
+                ><i data-icon="eye-off" data-size="18"></i
+              ></span>
+              <h2>Patch concealment</h2>
+            </div>
+            <p class="muted">
+              Reduces some signs of API patching. Off by default; patches can
+              still be detected.
+            </p>
+            <div class="shield">
+              <div class="shield-text">
+                <div class="shield-name">Stealth mode</div>
+                <p class="muted">Known CAPTCHA providers remain excluded.</p>
+              </div>
+              <button
+                id="stealth-toggle"
+                class="switch"
+                type="button"
+                role="switch"
+                aria-label="Stealth mode"
+              >
+                <span class="switch-thumb"></span>
+              </button>
+            </div>
+            <div class="shield">
+              <div class="shield-text">
+                <div class="shield-name">Google Flow</div>
+                <p class="muted">
+                  Changes client-side country checks. Experimental, off by
+                  default, and dependent on Google behavior. Respects the main
+                  protection switch.
+                </p>
+              </div>
+              <button
+                id="flow-unlock-toggle"
+                class="switch"
+                type="button"
+                role="switch"
+                aria-label="Google Flow compatibility"
+              >
+                <span class="switch-thumb"></span>
+              </button>
+            </div>
+          </section>
+        </div>
+        <div class="options-column">
+          <section class="card">
+            <div class="panel-kicker" dir="ltr">
+              <span>03 / IDENTITY PROFILE</span><span>AUTO / MANUAL</span>
+            </div>
+            <div class="card-head">
+              <span class="chip-icon"
+                ><i data-icon="globe" data-size="18"></i
+              ></span>
+              <h2>Profile & overrides</h2>
+            </div>
+            <p class="muted">
+              Independent of your VPN provider. Country detection does not
+              verify a VPN connection. Automatic mode pauses when exit data is
+              unknown or stale.
+            </p>
+            <div class="field">
+              <label for="profile-country">Profile country</label
+              ><select id="profile-country" class="input"></select>
+            </div>
+            <div id="mismatches" class="warnings"></div>
+            <div class="field">
+              <label for="timeZone"
+                ><i data-icon="clock"></i><span>Timezone</span></label
+              ><select id="timeZone" class="input"></select>
+              <p class="muted field-hint" id="timeZone-hint"></p>
+            </div>
+            <div class="field">
+              <label for="locale"
+                ><i data-icon="languages"></i><span>Language</span></label
+              ><select id="locale" class="input"></select>
+              <p class="muted field-hint" id="locale-hint"></p>
+            </div>
+            <div class="field">
+              <label for="acceptLanguage"
+                ><i data-icon="globe"></i
+                ><span>Accept-Language header</span></label
+              ><select id="acceptLanguage" class="input"></select>
+              <p class="muted field-hint" id="acceptLanguage-hint"></p>
+            </div>
+            <div class="field">
+              <label for="countryCoords"
+                ><i data-icon="map-pin"></i><span>Coordinates</span></label
+              ><select id="countryCoords" class="input"></select>
+              <div class="row">
+                <input
+                  id="latitude"
+                  class="input"
+                  type="text"
+                  inputmode="decimal"
+                  dir="ltr"
+                  placeholder="Latitude"
+                  aria-label="Latitude"
+                /><input
+                  id="longitude"
+                  class="input"
+                  type="text"
+                  inputmode="decimal"
+                  dir="ltr"
+                  placeholder="Longitude"
+                  aria-label="Longitude"
+                />
+              </div>
+              <p class="muted field-hint" id="coordinates-hint"></p>
+            </div>
+          </section>
+          <section class="card">
+            <div class="panel-kicker" dir="ltr">
+              <span>04 / SITE EXCEPTIONS</span><span>LOCAL CONTROL</span>
+            </div>
+            <div class="card-head">
+              <span class="chip-icon"
+                ><i data-icon="list-x" data-size="18"></i
+              ></span>
+              <h2>Site exceptions</h2>
+            </div>
+            <p class="muted">
+              Exceptions pause page and request-header changes. They do not
+              change VPN routing or the browser-wide WebRTC policy.
+            </p>
+            <div class="shield">
+              <div class="shield-text">
+                <div class="shield-name">Automatic Iranian-site exceptions</div>
+                <p class="muted">
+                  Covers .ir domains and the downloaded list. Optional and off
+                  by default.
+                </p>
+              </div>
+              <button
+                id="iran-exempt-toggle"
+                class="switch"
+                type="button"
+                role="switch"
+                aria-label="Automatic Iranian-site exceptions"
+              >
+                <span class="switch-thumb"></span>
+              </button>
+            </div>
+            <div class="iran-list row">
+              <p class="muted" id="iran-list-status">…</p>
+              <button id="iran-list-refresh" class="ghost-button" type="button">
+                <i data-icon="refresh-cw"></i><span>Download list</span>
+              </button>
+            </div>
+            <p class="microcopy">
+              Downloads from GitHub. Exclude the current domain from Overview;
+              its subdomains are also excluded.
+            </p>
+            <ul id="whitelist" class="list"></ul>
+          </section>
+          <section class="card">
+            <div class="panel-kicker" dir="ltr">
+              <span>05 / PRIVACY & LIMITS</span><span>TRANSPARENT</span>
+            </div>
+            <h2>Privacy & limitations</h2>
+            <ul class="privacy-list">
+              <li>
+                Exit detection uses ipwho.is with Cloudflare as a fallback,
+                every two minutes and on network changes. Country alone does not
+                prove a VPN is connected.
+              </li>
+              <li>
+                Manual IPv4 / IPv6 checks use ipify. Exit observations and
+                settings stay in local extension storage.
+              </li>
+              <li>
+                Reputation reports send the IP to AbuseIPDB or Spamhaus only
+                when you open a source link. Browsing history is not sent. No
+                internal score or safety guarantee is provided.
+              </li>
+              <li>
+                WebRTC policy applies browser-wide and may disrupt calls.
+                Turning protection off releases this extension-controlled
+                setting.
+              </li>
+              <li>
+                RaptorShield does not create a VPN or affect other apps. Split
+                tunneling may give different sites different routes.
+              </li>
+              <li>
+                Module workers and some newer execution contexts are not fully
+                covered. Leak protection, IP reputation and anonymity are not
+                guaranteed.
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+      <footer class="hud-footer" dir="ltr">
+        <span>RAPTORSHIELD / PROVIDER INDEPENDENT</span
+        ><span>LOCAL SETTINGS · EXPLICIT REPORT LOOKUPS</span>
+      </footer>
+    </main>
+  </body>
+</html>

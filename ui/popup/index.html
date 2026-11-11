@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>RaptorShield · Browser Identity</title>
+    <link rel="stylesheet" href="/assets/hud.css" />
+    <script type="module" src="/popup.js"></script>
+  </head>
+  <body class="popup-body">
+    <main class="popup">
+      <header class="hud-header" dir="ltr">
+        <a
+          class="brand"
+          href="#"
+          id="brand-settings"
+          aria-label="RaptorShield settings"
+        >
+          <img src="/icons/raptorshield.svg" width="38" height="38" alt="" />
+          <span
+            ><strong>RAPTORSHIELD<span class="brand-slash">/</span></strong
+            ><small>BROWSER IDENTITY SYSTEM</small></span
+          >
+        </a>
+        <button id="settings" class="icon-button" aria-label="Settings">
+          <i data-icon="sliders-horizontal"></i>
+        </button>
+      </header>
+
+      <section
+        class="panel protection-panel"
+        aria-labelledby="protection-title"
+      >
+        <div class="panel-kicker" dir="ltr">
+          <span>01 / IDENTITY SHIELD</span
+          ><span id="protection-code" class="status-code">STANDBY</span>
+        </div>
+        <div class="protection-main">
+          <div>
+            <h1 id="protection-title">Loading status</h1>
+            <p id="protection-hint" class="muted">
+              Works with any VPN provider
+            </p>
+          </div>
+          <button
+            id="master"
+            class="switch"
+            role="switch"
+            aria-checked="false"
+            aria-label="Browser protection"
+            disabled
+          >
+            <span class="switch-thumb"></span>
+          </button>
+        </div>
+        <div class="site-strip">
+          <span class="status-light" id="site-light"></span
+          ><bdi id="active-host">—</bdi
+          ><button id="site-exempt" class="text-button" disabled>
+            Exclude site
+          </button>
+        </div>
+      </section>
+
+      <p id="error" class="notice error" role="alert" hidden></p>
+      <div id="reload-notice" class="notice" hidden>
+        <span>Reload the page to apply your settings.</span
+        ><button id="reload" class="text-button">Reload</button>
+      </div>
+
+      <nav class="hud-tabs" role="tablist" aria-label="RaptorShield panels">
+        <button
+          id="tab-overview"
+          role="tab"
+          aria-selected="true"
+          aria-controls="view-overview"
+          tabindex="0"
+          data-view="overview"
+        >
+          Overview
+        </button>
+        <button
+          id="tab-reputation"
+          role="tab"
+          aria-selected="false"
+          aria-controls="view-reputation"
+          tabindex="-1"
+          data-view="reputation"
+        >
+          IP reputation
+        </button>
+        <button
+          id="tab-shields"
+          role="tab"
+          aria-selected="false"
+          aria-controls="view-shields"
+          tabindex="-1"
+          data-view="shields"
+        >
+          Shields <span id="shield-count" class="tab-count">—</span>
+        </button>
+      </nav>
+
+      <div
+        id="view-overview"
+        class="view"
+        role="tabpanel"
+        aria-labelledby="tab-overview"
+      >
+        <section class="panel exit-panel" aria-labelledby="exit-title">
+          <div class="panel-kicker" dir="ltr">
+            <span id="exit-title">02 / BROWSER EXIT IP</span
+            ><span class="status-code" id="exit-status">UNKNOWN</span>
+          </div>
+          <div class="ip-readout" dir="ltr">
+            <span id="exit-ip">— — —</span
+            ><button
+              id="copy-ip"
+              class="icon-button"
+              aria-label="Copy exit IP address"
+              disabled
+            >
+              ⧉
+            </button>
+          </div>
+          <div class="location-line">
+            <span id="exit-location">Not checked yet</span
+            ><span id="exit-source" class="mono">—</span>
+          </div>
+          <dl class="data-grid">
+            <div>
+              <dt>Network / ISP</dt>
+              <dd id="exit-isp">—</dd>
+            </div>
+            <div>
+              <dt>ASN</dt>
+              <dd id="exit-asn" class="mono">—</dd>
+            </div>
+            <div>
+              <dt>Timezone</dt>
+              <dd id="exit-timezone" class="mono">—</dd>
+            </div>
+            <div>
+              <dt>Last successful check</dt>
+              <dd id="exit-checked">—</dd>
+            </div>
+          </dl>
+          <div id="address-details" class="address-details" hidden>
+            <div><span>IPv4</span><bdi id="exit-ipv4">—</bdi></div>
+            <div><span>IPv6</span><bdi id="exit-ipv6">—</bdi></div>
+            <p id="address-hint" class="muted"></p>
+          </div>
+          <p id="exit-message" class="notice" hidden></p>
+          <button id="check-ip" class="primary-button block">
+            <i data-icon="refresh-cw"></i
+            ><span>Check exit IP & IPv4 / IPv6</span>
+          </button>
+          <p class="microcopy">
+            Connects to ipwho.is and ipify. Split tunneling may route other
+            sites differently.
+          </p>
+        </section>
+        <section class="panel sync-panel" aria-labelledby="sync-title">
+          <div class="panel-kicker" dir="ltr">
+            <span id="sync-title">03 / IDENTITY SYNC</span
+            ><span class="status-code" id="sync-status">UNVERIFIED</span>
+          </div>
+          <label for="country" class="field-label">Browser profile</label
+          ><select id="country" class="input" disabled></select>
+          <p id="country-hint" class="muted"></p>
+          <div class="sync-values">
+            <span>TIMEZONE<bdi id="profile-timezone">—</bdi></span
+            ><span>LANGUAGE<bdi id="profile-locale">—</bdi></span>
+          </div>
+          <p id="sync-warning" class="notice" hidden></p>
+        </section>
+      </div>
+
+      <div
+        id="view-reputation"
+        class="view"
+        role="tabpanel"
+        aria-labelledby="tab-reputation"
+        hidden
+      >
+        <section
+          class="panel reputation-panel"
+          aria-labelledby="reputation-title"
+        >
+          <div class="panel-kicker" dir="ltr">
+            <span>02 / IP REPUTATION</span
+            ><span class="status-code" data-tone="warn">UNKNOWN</span>
+          </div>
+          <div class="radar-mark" aria-hidden="true">
+            <i data-icon="scan" data-size="35"></i>
+          </div>
+          <h2 id="reputation-title">IP reputation is unknown</h2>
+          <p class="muted">
+            Review independent reports. VPN use alone is not abuse, and no
+            reports does not guarantee safety.
+          </p>
+          <label class="field-label" for="report-ip">IP address to check</label
+          ><select
+            id="report-ip"
+            class="input mono"
+            dir="ltr"
+            disabled
+          ></select>
+          <p id="report-freshness" class="muted"></p>
+          <div class="report-sources">
+            <a
+              id="abuse-report"
+              class="source-link"
+              aria-disabled="true"
+              target="_blank"
+              rel="noopener noreferrer"
+              ><span
+                ><strong>AbuseIPDB</strong
+                ><small>Abuse reports and timestamps</small></span
+              ><span aria-hidden="true">↗</span></a
+            >
+            <a
+              id="spamhaus-report"
+              class="source-link"
+              aria-disabled="true"
+              target="_blank"
+              rel="noopener noreferrer"
+              ><span
+                ><strong>Spamhaus</strong
+                ><small
+                  >Blocklist findings, mostly related to email</small
+                ></span
+              ><span aria-hidden="true">↗</span></a
+            >
+          </div>
+          <p class="notice">
+            Opening a report sends the selected IP to that service. Results
+            appear on the source website. RaptorShield does not generate a
+            reputation score.
+          </p>
+          <p class="microcopy">
+            These reports cannot predict Instagram account decisions. A PBL
+            entry alone does not indicate abuse.
+          </p>
+          <button id="reputation-refresh" class="ghost-button block">
+            <i data-icon="refresh-cw"></i
+            ><span>Refresh IP before checking</span>
+          </button>
+        </section>
+      </div>
+
+      <div
+        id="view-shields"
+        class="view"
+        role="tabpanel"
+        aria-labelledby="tab-shields"
+        hidden
+      >
+        <section class="panel" aria-labelledby="audit-title">
+          <div class="panel-kicker" dir="ltr">
+            <span>02 / SHIELD DIAGNOSTICS</span
+            ><span id="audit-code" class="status-code">UNVERIFIED</span>
+          </div>
+          <h2 id="audit-title">Page shield status</h2>
+          <p id="audit-summary" class="muted">
+            Inspects the current state of the active page.
+          </p>
+          <ul id="shield-grid" class="shield-grid"></ul>
+          <ul id="audit-issues" class="audit-issues"></ul>
+          <button id="run-audit" class="ghost-button block">
+            <i data-icon="scan"></i><span>Inspect active page</span>
+          </button>
+          <p class="microcopy">
+            Installed does not mean secure. The WebRTC check reads browser
+            policy; it is not an actual IP leak test.
+          </p>
+        </section>
+      </div>
+      <footer class="hud-footer" dir="ltr">
+        <span>ANY VPN. YOUR CONTROL.</span><span id="version">v1.1.2</span>
+      </footer>
+    </main>
+  </body>
+</html>

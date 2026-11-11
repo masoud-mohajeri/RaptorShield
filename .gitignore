@@ -1,0 +1,16 @@
+# Operating-system metadata
+.DS_Store
+.AppleDouble
+Thumbs.db
+
+# Local dependencies and generated release archives
+node_modules/
+dist/
+*.zip
+*.crx
+
+# Local environment values and extension signing keys
+.env
+.env.*
+!.env.example
+*.pem
